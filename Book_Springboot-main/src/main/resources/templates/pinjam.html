@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Peminjaman Buku - Perpustakaan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow-sm mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="/pinjam">🏛️ Sistem Perpustakaan</a>
+            <div class="navbar-nav ms-auto">
+                <a class="nav-link active fw-semibold" href="/pinjam">Pinjam Buku</a>
+                <a class="nav-link" href="/buku">Data Buku</a>
+                <a class="nav-link" href="/anggota">Data Anggota</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container py-3">
+        <div class="row justify-content-center">
+            <div class="col-md-9">
+                <div class="card shadow border-0 rounded-4">
+                    <div class="card-body p-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h3 class="fw-bold text-primary mb-0">📚 Peminjaman Buku</h3>
+                            <span class="badge bg-secondary fs-6">Anggota Aktif: <span th:text="${idAnggota}">A001</span></span>
+                        </div>
+
+                        <div th:if="${pesan}" class="alert alert-warning alert-dismissible fade show" role="alert">
+                            <strong class="fw-bold">Perhatian!</strong> <span th:text="${pesan}">Pesan error</span>
+                            <div th:if="${bisaReservasi}" class="mt-2">
+                                <span class="badge bg-danger">Buku dapat direservasi</span>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                        </div>
+
+                        <div class="table-responsive">
+                            <table class="table table-hover align-middle">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th>ID Buku</th>
+                                        <th>Judul Buku</th>
+                                        <th class="text-center">Stok</th>
+                                        <th class="text-center">Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="buku : ${daftarBuku}">
+                                        <td class="text-muted fw-bold" th:text="${buku.idBuku}">B001</td>
+                                        <td class="fw-semibold" th:text="${buku.judul}">Judul Buku</td>
+                                        <td class="text-center">
+                                            <span class="badge fs-6" th:classappend="${buku.stok > 0} ? 'bg-success' : 'bg-danger'" th:text="${buku.stok}">0</span>
+                                        </td>
+                                        <td class="text-center">
+                                            <form th:action="@{/pinjam}" method="post" class="d-inline">
+                                                <input type="hidden" name="idBuku" th:value="${buku.idBuku}" />
+                                                <button type="submit" class="btn btn-sm btn-primary px-3">Pinjam</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
